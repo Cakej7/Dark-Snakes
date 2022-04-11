@@ -248,4 +248,4 @@ function stopGhostTimer () {
 //FUN FEATURES TO ADD:
 // change the game end text to rotate between a few different results. 
 
-// style the start/reset button to be more fun
+// style the start/reset button to be more interesting
