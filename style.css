@@ -1,0 +1,135 @@
+body {
+    font-family: DSFont, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgb(230, 230, 230);;
+    text-align: center;
+    margin: 0px;
+    background-color: rgb(0, 0, 0);
+    box-sizing: border-box;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+h1 {
+    font-size: 80px;
+    margin: 0px;
+    margin-top: 5px;
+    font-family: DSFont;
+    text-shadow: #f7f7f7 0px 0px 10px;
+}
+
+p {
+    margin: 20px;
+    font-family: DSFont;
+}
+
+#game_board div{
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 0);
+    width: 20px;
+    height: 20px;
+    float: left;
+}
+
+#game_board {
+    width: calc(20 * 20px);
+    height: calc(20 * 20px);
+    margin: auto;
+    border: 3px dotted rgb(221, 219, 219);
+}
+
+#game_board .snake {
+    background-color: rgb(255, 177, 22);
+}
+
+#game_board .enemy {
+    border-radius: 50%;
+    background-color: rgb(118, 155, 194);
+}
+
+#game_board .ghost {
+    border-radius: 50%;
+    background-color: rgb(127, 0, 206);
+    -webkit-animation: blink-text 1000ms linear infinite;
+}
+
+#start_reset {
+    margin: 10px;
+    font-size: 15px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: rgb(212, 208, 208);
+    border: 2px solid rgb(142, 36, 36);
+    flex-basis: auto;
+    align-self: center;
+}
+
+#start_reset:active {
+    transform: scale(0.97);
+    box-shadow: 2px 2px 22px 5px rgba(251, 249, 249, .6);
+}
+
+#scoreElem {
+    margin: 0;
+    margin-bottom: 20px;
+    font-size: 30px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#gameEndScreen {
+    font-family: DSFont;
+    font-size: 30px;
+    margin: 20px;
+    margin-bottom: 5px;
+    color: rgb(227, 213, 213);
+}
+
+#clickMeArrow {
+    font-size: 40px;
+    -webkit-animation: blink-text 1000ms linear infinite;
+    margin: 5px;
+}
+
+#snakeIcon {
+    font-size: 200px;
+    position: absolute;
+    align-self: center;
+    z-index: 1;
+}
+
+
+#youDiedImg {
+    position: absolute;
+    align-self: center;
+
+}
+
+#startTaunt {
+    margin: 0;
+    font-family: DSFont;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 30px;
+}
+
+@-webkit-keyframes blink-text {
+	0% { color: white; opacity: 1; }
+	20% { color: white;opacity: .8; }
+	30% { color: white;opacity: .6; }
+	40% { color: white;opacity: .4; }
+	50% { color: white;opacity: .2; }
+	60% { color: white;opacity: 0; }
+	70% { color: white;opacity: .2; }
+	80% { color: white;opacity: .4; }
+	90% { color: white;opacity: .6; }
+	98% { color: white;opacity: .8; }
+	100% { color: white;opacity: 1; }
+
+    @font-face {
+        font-family: DSFont;
+        src: url(OptimusPrincepsSemiBold.ttf);
+      }
