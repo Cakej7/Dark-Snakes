@@ -20,6 +20,7 @@ let gameTimer;
 
 //run startGame on button click
 start_reset.addEventListener('click', startGame)
+// start_reset.addEventListener('click', stopGhostTimer)
 
 
 //create the board on startup
@@ -47,7 +48,7 @@ document.body.onload = function initialize () {
 // reset timers, default snake position, and setup the board
 function startGame() {
     stopGameTimer()
-    stopGhostTimer()
+    // stopGhostTimer()
 
     xCord = 0;
     yCord = 9;
@@ -91,6 +92,19 @@ function winState () {
     youDiedElem.style.display = 'none'
 }
 
+//lose state
+function loseState () {
+    // tail collision
+    if (board[yCord][xCord].snake > 0) {
+        snakeLength = 0
+        gameEndScreenElem.style.display = 'block'
+        clickMeArrowElem.style.display = 'block'
+        youDiedElem.style.display = 'block'
+        gameEndScreenElem.innerHTML = 'Try, try, and try again.'    
+        // stopGhostTimer ()
+    }
+}
+
 
 //movement keys
 document.onkeydown = function keyPress(event) {
@@ -109,10 +123,7 @@ document.onkeydown = function keyPress(event) {
     event.preventDefault()
 };
 
-
-//main game loop
-function gameLoop() {
-    
+function movement () {
     //movement
     if (snakeDir === 'Up') {
         yCord--
@@ -123,8 +134,9 @@ function gameLoop() {
     } else if (snakeDir === 'Right') {
         xCord++
     }
+}
 
-
+function wallPassThrough () {
     // wall pass through
     if (xCord < 0) {
         xCord = gameBoardWidth-1
@@ -135,18 +147,9 @@ function gameLoop() {
     } else if (yCord >= gameBoardHeight) {
         yCord = 0
     }
+}
 
-
-    // tail collision
-    if (board[yCord][xCord].snake > 0) {
-        snakeLength = 0
-        gameEndScreenElem.style.display = 'block'
-        clickMeArrowElem.style.display = 'block'
-        youDiedElem.style.display = 'block'
-        gameEndScreenElem.innerHTML = 'Try, try, and try again.'    
-    }
-
-
+function enemyCollision () {
     // enemy collision
     if (board[yCord][xCord].enemy === 1) {
         snakeLength += 2
@@ -155,15 +158,63 @@ function gameLoop() {
         randomEnemy()
         ghostTimer()
     }
+}
 
+function ghostCollision () {
     // ghost collision. keeps the player from going to a snakelength of 0.
     if (board[yCord][xCord].ghost === 1 && snakeLength >= 5) {
-    snakeLength -= 1
-    score++
-    scoreElem.innerHTML = `Soul's Collected: ${score}`
-    board[yCord][xCord].ghost = 0
+        snakeLength -= 1
+        score++
+        scoreElem.innerHTML = `Soul's Collected: ${score}`
+        board[yCord][xCord].ghost = 0
     } else {board[yCord][xCord].ghost = 0}
+}
 
+// randomize and place enemies
+function randomEnemy () {
+    let enemyYcord = Math.floor(Math.random() * gameBoardHeight)
+    let enemyXcord = Math.floor(Math.random() * gameBoardWidth)
+        board[enemyYcord][enemyXcord].enemy = 1
+}
+
+
+// randomize and place ghost, setting ghost timers
+function ghostTimer () {
+    setTimeout(function randomGhost () {
+        let ghostYcord = Math.floor(Math.random() * gameBoardHeight)
+        let ghostXcord = Math.floor(Math.random() * gameBoardWidth)
+            board[ghostYcord][ghostXcord].ghost = 1
+            // stopGhostTimer ()
+            ghostInterval = setTimeout(() => {
+                    board[ghostYcord][ghostXcord].ghost = 0
+                }, 2500);
+    }, 5000)
+    stopGhostTimer()
+}
+
+//(not working as intended)
+function stopGhostTimer () {
+    clearTimeout(ghostInterval)
+}   
+
+//game loop timer
+function gameLoopTimer () {
+    gameTimer = setTimeout(gameLoop, 1000/snakeLength)
+}
+
+// stop game loop timer
+function stopGameTimer () {
+    clearTimeout(gameTimer)
+}
+
+
+//main game loop
+function gameLoop() {
+    movement ()
+    wallPassThrough ()
+    loseState ()
+    enemyCollision ()
+    ghostCollision ()
 
     // Update the board snake position
     board[yCord][xCord].snake = snakeLength;
@@ -178,10 +229,10 @@ function gameLoop() {
                 squares.element.className = 'snake'
                 squares.snake -= 1
             } 
-            else if (squares.enemy === 1 && score < 20 && snakeLength > 0) {
+            else if (squares.enemy === 1 && snakeLength > 0) {
                 squares.element.className = 'enemy'
             } 
-            else if (squares.ghost === 1 && score < 20 && snakeLength > 0) {
+            else if (squares.ghost === 1 && snakeLength > 0) {
                 squares.element.className = 'ghost'
             }
             else {
@@ -200,44 +251,6 @@ function gameLoop() {
         winState()
     }
 };
-
-
-function gameLoopTimer () {
-    gameTimer = setTimeout(gameLoop, 1000/snakeLength)
-}
-
-
-function stopGameTimer () {
-    clearTimeout(gameTimer)
-}
-
-
-// randomize and place enemies
-function randomEnemy () {
-    let enemyYcord = Math.floor(Math.random() * gameBoardHeight)
-    let enemyXcord = Math.floor(Math.random() * gameBoardWidth)
-        board[enemyYcord][enemyXcord].enemy = 1
-}
-
-
-// randomize and place ghost, setting ghost timers
-function ghostTimer () {
-    ghostInterval = setTimeout(function randomGhost () {
-        let ghostYcord = Math.floor(Math.random() * gameBoardHeight)
-        let ghostXcord = Math.floor(Math.random() * gameBoardWidth)
-            board[ghostYcord][ghostXcord].ghost = 1
-                setTimeout(() => {
-                    board[ghostYcord][ghostXcord].ghost = 0
-                }, 2500);
-    }, 5000)
-}
-
-
-//(not working as intended)
-function stopGhostTimer () {
-    clearTimeout(ghostInterval)
-}   
-
 
 
 //BUGS TO FIX:
