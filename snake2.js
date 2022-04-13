@@ -20,7 +20,6 @@ let gameTimer;
 
 //run startGame on button click
 start_reset.addEventListener('click', startGame)
-// start_reset.addEventListener('click', stopGhostTimer)
 
 
 //create the board on startup
@@ -48,7 +47,7 @@ document.body.onload = function initialize () {
 // reset timers, default snake position, and setup the board
 function startGame() {
     stopGameTimer()
-    // stopGhostTimer()
+    stopGhostTimer()
 
     xCord = 0;
     yCord = 9;
@@ -101,7 +100,6 @@ function loseState () {
         clickMeArrowElem.style.display = 'block'
         youDiedElem.style.display = 'block'
         gameEndScreenElem.innerHTML = 'Try, try, and try again.'    
-        // stopGhostTimer ()
     }
 }
 
@@ -161,8 +159,8 @@ function enemyCollision () {
 }
 
 function ghostCollision () {
-    // ghost collision. keeps the player from going to a snakelength of 0.
-    if (board[yCord][xCord].ghost === 1 && snakeLength >= 5) {
+    // ghost collision
+    if (board[yCord][xCord].ghost === 1) {
         snakeLength -= 1
         score++
         scoreElem.innerHTML = `Soul's Collected: ${score}`
@@ -180,27 +178,32 @@ function randomEnemy () {
 
 // randomize and place ghost, setting ghost timers
 function ghostTimer () {
-    setTimeout(function randomGhost () {
-        let ghostYcord = Math.floor(Math.random() * gameBoardHeight)
-        let ghostXcord = Math.floor(Math.random() * gameBoardWidth)
+    let ghostYcord = Math.floor(Math.random() * gameBoardHeight)
+    let ghostXcord = Math.floor(Math.random() * gameBoardWidth)
+
+    if (ghostCollision) {
+        ghostInterval = setTimeout(() => {
             board[ghostYcord][ghostXcord].ghost = 1
-            // stopGhostTimer ()
-            ghostInterval = setTimeout(() => {
+            setTimeout(() => {
                     board[ghostYcord][ghostXcord].ghost = 0
                 }, 2500);
     }, 5000)
-    stopGhostTimer()
+    }
+
 }
+
 
 //(not working as intended)
 function stopGhostTimer () {
     clearTimeout(ghostInterval)
 }   
 
+
 //game loop timer
 function gameLoopTimer () {
     gameTimer = setTimeout(gameLoop, 1000/snakeLength)
 }
+
 
 // stop game loop timer
 function stopGameTimer () {
@@ -210,11 +213,12 @@ function stopGameTimer () {
 
 //main game loop
 function gameLoop() {
-    movement ()
-    wallPassThrough ()
-    loseState ()
-    enemyCollision ()
-    ghostCollision ()
+    movement()
+    wallPassThrough()
+    loseState()
+    enemyCollision()
+    ghostCollision()
+    
 
     // Update the board snake position
     board[yCord][xCord].snake = snakeLength;
@@ -255,7 +259,7 @@ function gameLoop() {
 
 //BUGS TO FIX:
 
-// when clicking start/reset, the ghosts will spawn from the timer of the game before. Some issue with clearTimeout.
+// start/reset does not reset the ghost timer. stopGhostTimer not working.
 
 
 //FUN FEATURES TO ADD:
