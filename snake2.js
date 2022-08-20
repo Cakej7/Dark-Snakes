@@ -7,7 +7,7 @@ const snakeIconElem = document.getElementById('snakeIcon')
 const youDiedElem = document.getElementById('youDiedImg')
 const startTaunt = document.getElementById('startTaunt')
 const board = [];
-const gameBoardWidth = 20
+const gameBoardWidth = 20;
 const gameBoardHeight = 20;
 let xCord;
 let yCord;
@@ -47,7 +47,6 @@ document.body.onload = function initialize () {
 // reset timers, default snake position, and setup the board
 function startGame() {
     stopGameTimer()
-    stopGhostTimer()
 
     xCord = 0;
     yCord = 9;
@@ -151,10 +150,11 @@ function enemyCollision () {
     // enemy collision
     if (board[yCord][xCord].enemy === 1) {
         snakeLength += 2
-        console.log(score)
+        // console.log(score)
         board[yCord][xCord].enemy = 0
         randomEnemy()
         ghostTimer()
+        
     }
 }
 
@@ -175,28 +175,28 @@ function randomEnemy () {
         board[enemyYcord][enemyXcord].enemy = 1
 }
 
-
+let innerGhostInt
 // randomize and place ghost, setting ghost timers
 function ghostTimer () {
     let ghostYcord = Math.floor(Math.random() * gameBoardHeight)
     let ghostXcord = Math.floor(Math.random() * gameBoardWidth)
 
+    
     if (ghostCollision) {
         ghostInterval = setTimeout(() => {
             board[ghostYcord][ghostXcord].ghost = 1
-            setTimeout(() => {
+                innerGhostInt = setTimeout(() => {
                     board[ghostYcord][ghostXcord].ghost = 0
                 }, 2500);
     }, 5000)
     }
-
 }
 
 
 //(not working as intended)
-function stopGhostTimer () {
-    clearTimeout(ghostInterval)
-}   
+// function stopGhostTimer () {
+//     clearTimeout(ghostInterval)
+// }   
 
 
 //game loop timer
@@ -251,7 +251,7 @@ function gameLoop() {
 
 
     // winner winner
-    if (score === 10) {
+    if (score === 1) {
         winState()
     }
 };
