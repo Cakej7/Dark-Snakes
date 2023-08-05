@@ -12,11 +12,11 @@ body {
     position: relative;
     max-width: 100%;
     max-height: 100%;
-
+    overscroll-behavior-y: none;
 }
 
 h1 {
-    font-size: 80px;
+    font-size: 12vw;
     margin: 0px;
     margin-top: 5px;
     font-family: DSFont;
@@ -24,8 +24,9 @@ h1 {
     font-family: DSFont, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-p {
-    margin: 20px;
+#rules-description {
+    font-size: 10px;
+    margin: 10px;
 }
 
 #game_board div{
@@ -44,9 +45,8 @@ p {
     align-self: center;
     width: calc(20 * 4vw);
     height: calc(20 * 4vw);
-    margin: auto;
+    margin: 10px;
     border: 3px dotted rgb(221, 219, 219);
-    touch-action: none;
 }
 
 #game_board .snake {
@@ -66,19 +66,19 @@ p {
 
 #start_reset {
     margin: 10px;
-    margin-top: 20px;
     font-size: 15px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background-color: rgb(212, 208, 208);
-    border: 2px solid rgb(142, 36, 36);
-    flex-basis: auto;
+    background-color: black;
+    border: 2px solid rgb(255, 255, 255);
     align-self: center;
+    color: whitesmoke;
 }
 
 #start_reset:active {
     transform: scale(0.97);
     box-shadow: 2px 2px 22px 5px rgba(251, 249, 249, .6);
 }
+
 
 #scoreElem {
     margin: 0;
@@ -96,7 +96,7 @@ p {
 }
 
 #clickMeArrow {
-    font-size: 40px;
+    font-size: 30px;
     -webkit-animation: blink-text 1000ms linear infinite;
     margin: 5px;
 }
@@ -119,11 +119,10 @@ p {
 }
 
 #startTaunt {
-    margin: 0;
     font-family: DSFont;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 5px;
-    font-size: 30px;
+    font-size: 6vw;
 }
 
 @media (min-width: 620px) {
@@ -135,6 +134,10 @@ p {
     #game_board div{
         width: 24px;
         height: 24px;
+    }
+
+    #rules-description {
+        font-size: 20px;
     }
 }
 
