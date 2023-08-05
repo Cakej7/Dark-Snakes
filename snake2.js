@@ -14,13 +14,67 @@ let yCord;
 let snakeDir;
 let snakeLength;
 let score = 0;
-let ghostInterval;
+let ghostInterval = null;
+let innerGhostInt = null;
 let gameTimer;
+let touchStartX = 0;
+let touchStartY = 0;
 
+// touchscreen listeners
+document.addEventListener('touchstart', handleTouchStart);
+document.addEventListener('touchmove', handleTouchMove);
+document.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+}, { passive: false });
+
+function handleTouchStart(event) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+}
+
+function handleTouchMove(event) {
+    if (!touchStartX || !touchStartY) {
+        return;
+    }
+
+    const touchEndX = event.touches[0].clientX;
+    const touchEndY = event.touches[0].clientY;
+
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
+
+    // Check if the swipe was horizontal or vertical
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal swipe
+        if (dx > 0 && snakeDir !== 'Left') {
+            snakeDir = 'Right';
+        } else if (dx < 0 && snakeDir !== 'Right') {
+            snakeDir = 'Left';
+        }
+
+        event.preventDefault();
+        
+    } else {
+        // Vertical swipe
+        if (dy > 0 && snakeDir !== 'Up') {
+            snakeDir = 'Down';
+        } else if (dy < 0 && snakeDir !== 'Down') {
+            snakeDir = 'Up';
+        }
+
+        event.preventDefault();
+        
+    }
+
+    // Reset touchStartX and touchStartY for the next swipe
+    touchStartX = 0;
+    touchStartY = 0;
+}
 
 //run startGame on button click
 start_reset.addEventListener('click', startGame)
 
+// leftButton.addEventListener('click', handleLeftClick)
 
 //create the board on startup
 document.body.onload = function initialize () {
@@ -38,6 +92,7 @@ document.body.onload = function initialize () {
     }
 
     clearBoard()
+
     startTaunt.style.display = 'block'
     clickMeArrowElem.style.display = 'block'
     startTaunt.innerHTML = 'Click to begin. If you dare...'
@@ -102,6 +157,31 @@ function loseState () {
     }
 }
 
+
+
+function handleLeftClick () {
+    if (snakeDir !== 'Right') {
+        snakeDir = 'Left'
+    }
+}
+
+function handleRightClick () {
+    if (snakeDir !== 'Left') {
+        snakeDir = 'Right'
+    }
+}
+
+function handleUpClick () {
+    if (snakeDir !== 'Down') {
+        snakeDir = 'Up'
+    }
+}
+
+function handleDownClick () {
+    if (snakeDir !== 'Up') {
+        snakeDir = 'Down'
+    }
+}
 
 //movement keys
 document.onkeydown = function keyPress(event) {
@@ -175,7 +255,6 @@ function randomEnemy () {
         board[enemyYcord][enemyXcord].enemy = 1
 }
 
-let innerGhostInt
 // randomize and place ghost, setting ghost timers
 function ghostTimer () {
     let ghostYcord = Math.floor(Math.random() * gameBoardHeight)
@@ -193,10 +272,11 @@ function ghostTimer () {
 }
 
 
-//(not working as intended)
-// function stopGhostTimer () {
-//     clearTimeout(ghostInterval)
-// }   
+function stopGhostTimer () {
+    if (innerGhostInt !== null) {
+        clearTimeout(innerGhostInt);
+    }
+}
 
 
 //game loop timer
@@ -251,7 +331,7 @@ function gameLoop() {
 
 
     // winner winner
-    if (score === 1) {
+    if (score === 10) {
         winState()
     }
 };
