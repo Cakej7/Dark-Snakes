@@ -5,7 +5,7 @@ const gameEndScreenElem = document.getElementById('gameEndScreen')
 const clickMeArrowElem = document.getElementById('clickMeArrow')
 const snakeIconElem = document.getElementById('snakeIcon')
 const youDiedElem = document.getElementById('youDiedImg')
-const startTaunt = document.getElementById('startTaunt')
+// const startTaunt = document.getElementById('startTaunt')
 const board = [];
 const gameBoardWidth = 20;
 const gameBoardHeight = 20;
@@ -19,6 +19,38 @@ let innerGhostInt = null;
 let gameTimer;
 let touchStartX = 0;
 let touchStartY = 0;
+let firstCollision = false
+
+// Sound
+const musicOnIcon = document.getElementById('music-on')
+const musicOffIcon = document.getElementById('music-off')
+const enemy_audio = new Audio('./Sounds/Sword-Slash-V2.m4a');
+const ghost_audio = new Audio('./Sounds/swallow-dark-snakes-sound - 8_5_23, 7.52 PM.m4a');
+const start_audio = new Audio('./Sounds/411090__inspectorj__wind-chime-gamelan-gong-a.wav')
+
+musicOffIcon.style.display = 'none'
+
+let musicOn = true
+// console.log(musicOn)
+
+const musicOffFunc = () => {
+    musicOn = false
+    // console.log("musicOn", musicOn)
+    enemy_audio.volume = 0.2
+    musicOnIcon.style.display = 'none'
+    musicOffIcon.style.display = 'block'
+}
+
+const musicOnFunc = () => {
+    musicOn = true
+    // console.log('musicOn:', musicOn)
+    enemy_audio.volume = 0
+    musicOffIcon.style.display = 'none'
+    musicOnIcon.style.display = 'block'
+}
+
+musicOnIcon.addEventListener('click', musicOffFunc)
+musicOffIcon.addEventListener('click', musicOnFunc)
 
 // touchscreen listeners
 document.addEventListener('touchstart', handleTouchStart);
@@ -93,9 +125,9 @@ document.body.onload = function initialize () {
 
     clearBoard()
 
-    startTaunt.style.display = 'block'
+    // startTaunt.style.display = 'block'
     clickMeArrowElem.style.display = 'block'
-    startTaunt.innerHTML = 'Click to begin. If you dare...'
+    // startTaunt.innerHTML = 'Click to begin. If you dare...'
 }
 
 
@@ -108,10 +140,19 @@ function startGame() {
     snakeLength = 6;
     snakeDir = 'Right';
     score = 0
+    firstCollision = false
+
+    if (musicOn === true) {
+        start_audio.currentTime = 0;
+        start_audio.volume = 0.1
+        start_audio.play()
+    }
 
     clearBoard()
     randomEnemy();
     gameLoop()
+    stopGhostTimer()
+    stopInnerGhostTimer()
 };
 
 
@@ -122,7 +163,7 @@ function clearBoard () {
     clickMeArrowElem.style.display = 'none'
     snakeIconElem.style.display = 'none'
     youDiedElem.style.display = 'none'
-    startTaunt.style.display = 'none'
+    // startTaunt.style.display = 'none'
     
     for (let y = 0; y < gameBoardHeight; ++y) {
         for (let x = 0; x < gameBoardWidth; ++x) {
@@ -231,20 +272,30 @@ function enemyCollision () {
     if (board[yCord][xCord].enemy === 1) {
         snakeLength += 2
         // console.log(score)
-        board[yCord][xCord].enemy = 0
+        board[yCord][xCord].enemy = 0;
+        firstCollision = true;
         randomEnemy()
         ghostTimer()
-        
+        if (musicOn === true) {
+            enemy_audio.currentTime = 0;
+            enemy_audio.volume = 0.2
+            enemy_audio.play();
+        } else enemy_audio.volume = 0
     }
 }
 
 function ghostCollision () {
     // ghost collision
-    if (board[yCord][xCord].ghost === 1) {
+    if (board[yCord][xCord].ghost === 1 && score <= 10) {
         snakeLength -= 1
         score++
         scoreElem.innerHTML = `Soul's Collected: ${score}`
         board[yCord][xCord].ghost = 0
+        if (musicOn === true) {
+            ghost_audio.currentTime = 0;
+            ghost_audio.volume = 0.2
+            ghost_audio.play();
+        } else ghost_audio.volume = 0
     } else {board[yCord][xCord].ghost = 0}
 }
 
@@ -261,21 +312,21 @@ function ghostTimer () {
     let ghostXcord = Math.floor(Math.random() * gameBoardWidth)
 
     
-    if (ghostCollision) {
         ghostInterval = setTimeout(() => {
-            board[ghostYcord][ghostXcord].ghost = 1
-                innerGhostInt = setTimeout(() => {
-                    board[ghostYcord][ghostXcord].ghost = 0
-                }, 2500);
-    }, 5000)
-    }
+                board[ghostYcord][ghostXcord].ghost = 1
+                    innerGhostInt = setTimeout(() => {
+                        board[ghostYcord][ghostXcord].ghost = 0
+                    }, 2500);
+        }, 5000)
+
 }
 
-
 function stopGhostTimer () {
-    if (innerGhostInt !== null) {
-        clearTimeout(innerGhostInt);
-    }
+    clearTimeout(ghostInterval);
+}
+
+function stopInnerGhostTimer () {
+    clearTimeout(innerGhostInt);
 }
 
 
@@ -298,7 +349,6 @@ function gameLoop() {
     loseState()
     enemyCollision()
     ghostCollision()
-    
 
     // Update the board snake position
     board[yCord][xCord].snake = snakeLength;
@@ -316,7 +366,7 @@ function gameLoop() {
             else if (squares.enemy === 1 && snakeLength > 0) {
                 squares.element.className = 'enemy'
             } 
-            else if (squares.ghost === 1 && snakeLength > 0) {
+            else if (squares.ghost === 1 && snakeLength > 0 && firstCollision === true) {
                 squares.element.className = 'ghost'
             }
             else {
@@ -344,5 +394,3 @@ function gameLoop() {
 
 //FUN FEATURES TO ADD:
 // change the game end text to rotate between a few different results. 
-
-// style the start/reset button to be more interesting

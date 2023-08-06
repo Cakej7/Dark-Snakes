@@ -5,22 +5,30 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="#">
         <title>Snake</title>
     </head>
     <body>
+        <div>
+            <div class="music-container">
+                <img src="./Icons/speaker-off.svg" alt="music off" id="music-off" >
+                <img src="./Icons/speaker.svg" alt="music on" id="music-on" >
+            </div>
+        </div>
 
         <h1>Dark Snakes</h1>
 
         <p id="rules-description">
-        For each <span style="color: rgb(118, 155, 194);">foe</span> slain, it's <span style="color: rgb(127, 0, 206);">ghost</span> waits 5 seconds behind it. Catch the <span style="color: rgb(127, 0, 206);">ghosts</span> to collect their souls before they disappear. Collect 10 souls to win. 
+        For each <span style="color: rgb(118, 155, 194);">foe</span> slain, it's <span style="color: rgb(127, 0, 206);">soul</span> waits 5 seconds behind it. Catch the <span style="color: rgb(127, 0, 206);">souls</span> before they disappear. Collect 10 souls to win. 
         </p>
 
         
-        <div id="startTaunt"></div>
+        <!-- <div id="startTaunt"></div> -->
         
         <div id="clickMeArrow">⬇</div>
         
         <button id="start_reset" >Start/Reset</button>
+
         
         <div id="game_board"></div>
         

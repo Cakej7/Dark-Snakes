@@ -84,7 +84,7 @@ h1 {
     margin: 0;
     margin-bottom: 20px;
     font-size: 30px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: DSFont, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 #gameEndScreen {
@@ -125,6 +125,23 @@ h1 {
     font-size: 6vw;
 }
 
+.music-container {
+    position: fixed;
+    display: flex;
+    justify-content: flex-start;
+    float: left;
+}
+
+#music-off {
+    width: 6%;
+    height: 6%;
+}
+
+#music-on {
+    width: 6%;
+    height: 6%;
+}
+
 @media (min-width: 620px) {
     #game_board {
         width: calc(20 * 24px);
@@ -138,6 +155,16 @@ h1 {
 
     #rules-description {
         font-size: 20px;
+    }
+
+    #music-off {
+        width: 15%;
+        height: 15%;
+    }
+    
+    #music-on {
+        width: 15%;
+        height: 15%;
     }
 }
 
